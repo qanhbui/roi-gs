@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="ROI-NeRFs: Hi-Fi Visualization of Objects of Interest within a Scene by NeRFs Composition">
+  <meta name="keywords" content="NeRF, Neural Radiance Fields, 3D Reconstruction, ROI, Region of Interest, Level of Detail, Cultural Heritage">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ROI-NeRFs: Hi-Fi Visualization of Objects of Interest within a Scene by NeRFs Composition</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <style>
+    :root {
+      --primary: #4a6fa5;
+      --primary-dark: #2c4a7c;
+      --accent: #e07a5f;
+      --bg-light: #fafbfc;
+      --text-dark: #2d3436;
+      --text-muted: #636e72;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      color: var(--text-dark);
+    }
+
+    .hero-body .title,
+    .hero-body .subtitle {
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    /* ── Hero ── */
+    .publication-title {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 2.2rem !important;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--text-dark);
+    }
+
+    .publication-venue {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
+      padding: 4px 16px;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      margin-bottom: 1rem;
+    }
+
+    .publication-authors {
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .publication-authors a {
+      color: var(--primary-dark);
+      font-weight: 500;
+    }
+
+    .publication-authors a:hover {
+      color: var(--accent);
+    }
+
+    .author-block {
+      display: inline-block;
+      margin: 0 4px;
+    }
+
+    .publication-links .button {
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .publication-links .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    /* ── Sections ── */
+    .section {
+      padding: 2.5rem 1.5rem;
+    }
+
+    .section-title {
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: var(--text-dark);
+      margin-bottom: 1.2rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    /* ── Pipeline figure ── */
+    .pipeline-figure {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .pipeline-figure img {
+      border-radius: 8px;
+    }
+
+    .pipeline-figure figcaption {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.8rem;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* ── Abstract ── */
+    .abstract-content {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #444;
+      text-align: justify;
+    }
+
+    /* ── Method highlights ── */
+    .highlight-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+      border-left: 4px solid var(--primary);
+      height: 100%;
+      transition: transform 0.2s ease;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .highlight-card h4 {
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .highlight-card p {
+      font-size: 0.93rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .highlight-icon {
+      font-size: 1.8rem;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+
+    /* ── Results carousel placeholder ── */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.2rem;
+    }
+
+    .result-card {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      transition: transform 0.2s ease;
+    }
+
+    .result-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .result-card .placeholder-img {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #e8ecf1 0%, #d5dce6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .result-card .card-content {
+      padding: 0.8rem 1rem;
+    }
+
+    .result-card .card-content p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* ── BibTeX ── */
+    .bibtex-section {
+      background: var(--bg-light);
+      border-radius: 12px;
+      padding: 2rem;
+    }
+
+    .bibtex-block {
+      background: #1e2228;
+      color: #abb2bf;
+      border-radius: 10px;
+      padding: 1.2rem 1.5rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      position: relative;
+    }
+
+    .bibtex-block .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #abb2bf;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: background 0.2s;
+    }
+
+    .bibtex-block .copy-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* ── Related Work ── */
+    .related-link {
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .related-link:hover {
+      color: var(--accent);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      padding: 2rem 1.5rem;
+      background: var(--bg-light);
+    }
+
+    .footer-content {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .footer-content a {
+      color: var(--primary);
+    }
+
+    /* ── Video placeholder ── */
+    .video-placeholder {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.1rem;
+      margin: 1rem 0;
+    }
+
+    .video-placeholder i {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      opacity: 0.8;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .publication-title {
+        font-size: 1.5rem !important;
+      }
+      .section {
+        padding: 2rem 1rem;
+      }
+    }
+
+    /* ── Tab navigation for results ── */
+    .method-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .method-tab {
+      padding: 8px 20px;
+      border-radius: 20px;
+      border: 2px solid #e0e0e0;
+      background: #fff;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .method-tab:hover,
+    .method-tab.active {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* ── Teaser ── */
+    .teaser-section {
+      background: var(--bg-light);
+      padding: 2rem 0;
+    }
+
+    .teaser-caption {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      text-align: center;
+      max-width: 800px;
+      margin: 1rem auto 0;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!-- HERO                                                                -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop has-text-centered">
+
+      <div class="publication-venue">VISAPP 2026</div>
+
+      <h1 class="publication-title">
+        ROI-NeRFs: Hi-Fi Visualization of Objects of Interest<br>
+        within a Scene by NeRFs Composition
+      </h1>
+
+      <!-- Authors -->
+      <div class="publication-authors" style="margin-top:1rem;">
+        <span class="author-block">
+          <a href="https://github.com/qanhbui" target="_blank">Quoc-Anh Bui</a><sup>1,2</sup>,
+        </span>
+        <span class="author-block">
+          <a href="#">Gilles Rougeron</a><sup>1</sup>,
+        </span>
+        <span class="author-block">
+          <a href="#">Géraldine Morin</a><sup>2</sup>,
+        </span>
+        <span class="author-block">
+          <a href="#">Simone Gasparini</a><sup>2</sup>
+        </span>
+      </div>
+
+      <!-- Affiliations -->
+      <div class="publication-authors" style="margin-top:0.5rem; font-size:0.95rem; color: var(--text-muted);">
+        <span class="author-block"><sup>1</sup>Université Paris-Saclay, CEA-List</span>&nbsp;&nbsp;
+        <span class="author-block"><sup>2</sup>Université de Toulouse, Toulouse INP, IRIT</span>
+      </div>
+
+      <!-- Links -->
+      <div class="publication-links" style="margin-top:1.2rem;">
+        <span class="link-block">
+          <a href="https://arxiv.org/abs/2502.12673" target="_blank" class="button is-rounded is-dark is-small">
+            <span class="icon"><i class="ai ai-arxiv"></i></span>
+            <span>arXiv</span>
+          </a>
+        </span>
+        <span class="link-block">
+          <a href="https://arxiv.org/pdf/2502.12673" target="_blank" class="button is-rounded is-dark is-small">
+            <span class="icon"><i class="fas fa-file-pdf"></i></span>
+            <span>Paper</span>
+          </a>
+        </span>
+        <span class="link-block">
+          <a href="https://github.com/qanhbui/roi-nerfstudio" target="_blank" class="button is-rounded is-dark is-small">
+            <span class="icon"><i class="fab fa-github"></i></span>
+            <span>Code</span>
+          </a>
+        </span>
+        <!--
+        <span class="link-block">
+          <a href="#" class="button is-rounded is-dark is-small">
+            <span class="icon"><i class="fab fa-youtube"></i></span>
+            <span>Video</span>
+          </a>
+        </span>
+        <span class="link-block">
+          <a href="#" class="button is-rounded is-dark is-small">
+            <span class="icon"><i class="fas fa-database"></i></span>
+            <span>Data</span>
+          </a>
+        </span>
+        -->
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!-- TEASER                                                              -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<section class="teaser-section">
+  <div class="container is-max-desktop">
+    <figure class="pipeline-figure">
+      <!-- Replace the src below with your actual teaser image -->
+      <img src="static/images/teaser.png" alt="ROI-NeRFs teaser showing enhanced detail on objects of interest"
+           style="width:100%;"
+           onerror="this.style.display='none'; this.parentElement.querySelector('.fallback').style.display='flex';">
+      <div class="fallback" style="display:none; width:100%; height:300px; background:linear-gradient(135deg,#e8ecf1,#d5dce6); border-radius:8px; align-items:center; justify-content:center; color:#888;">
+        <div style="text-align:center;">
+          <i class="fas fa-image" style="font-size:2rem; margin-bottom:0.5rem;"></i><br>
+          Add your teaser image at <code>static/images/teaser.png</code>
+        </div>
+      </div>
+      <figcaption>
+        <strong>ROI-NeRFs</strong> decomposes a scene into a global Scene NeRF and multiple local ROI NeRFs,
+        enabling high-fidelity visualization of selected objects of interest within large-scale cultural heritage scenes.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!-- ABSTRACT                                                            -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="section-title">Abstract</h2>
+    <div class="abstract-content" style="margin-top:1.2rem;">
+      <p>
+        <!-- Efficient and accurate 3D reconstruction is essential for applications in cultural heritage.
+        This study addresses the challenge of visualizing objects within large-scale scenes at a high
+        level of detail (LOD) using Neural Radiance Fields (NeRFs). The aim is to improve the visual
+        fidelity of chosen objects while maintaining the efficiency of the computations by focusing on
+        details only for relevant content. -->
+      </p>
+      <p style="margin-top:0.8rem;">
+        <!-- The proposed <strong>ROI-NeRFs</strong> framework divides the scene into a <em>Scene NeRF</em>,
+        which represents the overall scene at moderate detail, and multiple <em>ROI NeRFs</em> that
+        focus on user-defined objects of interest. An object-focused camera selection module automatically
+        groups relevant cameras for each NeRF training during the <strong>decomposition phase</strong>.
+        In the <strong>composition phase</strong>, a Ray-level Compositional Rendering technique combines
+        information from the Scene NeRF and ROI NeRFs, allowing simultaneous multi-object rendering composition. -->
+      </p>
+      <p style="margin-top:0.8rem;">
+        <!-- Experiments on real-world cultural heritage datasets — including the <em>Abbaye de Montmajour</em>
+        and the <em>Hôtel de la Marine</em> — demonstrate that ROI-NeRFs significantly enhances the rendering
+        quality of selected objects with minimal computational overhead. -->
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!-- METHOD OVERVIEW                                                     -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<section class="section" style="background: var(--bg-light);">
+  <div class="container is-max-desktop">
+    <h2 class="section-title">Method Overview</h2>
+
+    <div class="columns is-multiline" style="margin-top:1.5rem;">
+      <div class="column is-4">
+        <div class="highlight-card">
+          <div class="highlight-icon"><i class="fas fa-vector-square"></i></div>
+          <h4>ROI Decomposition</h4>
+          <p>
+          <!-- User-defined bounding boxes separate the scene into a global Scene NeRF and local ROI NeRFs, each optimized for different levels of detail. -->
+          </p>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="highlight-card">
+          <div class="highlight-icon"><i class="fas fa-camera"></i></div>
+          <h4>Camera Selection</h4>
+          <p>
+            <!-- A semi-automatic, object-focused camera selection strategy ensures each ROI NeRF is trained with the most relevant views for maximum fidelity. -->
+          </p>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="highlight-card">
+          <div class="highlight-icon"><i class="fas fa-layer-group"></i></div>
+          <h4>Ray-level Composition</h4>
+          <p>
+            <!-- A Ray-level Compositional Rendering technique seamlessly merges Scene NeRF and ROI NeRFs, enabling multi-object high-fidelity rendering. -->
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pipeline Figure -->
+    <figure class="pipeline-figure" style="margin-top:1.5rem;">
+      <img src="static/images/pipeline.png" alt="ROI-NeRFs Pipeline"
+           style="width:100%;"
+           onerror="this.style.display='none'; this.parentElement.querySelector('.fallback').style.display='flex';">
+      <div class="fallback" style="display:none; width:100%; height:250px; background:linear-gradient(135deg,#e8ecf1,#d5dce6); border-radius:8px; align-items:center; justify-content:center; color:#888;">
+        <div style="text-align:center;">
+          <i class="fas fa-project-diagram" style="font-size:2rem; margin-bottom:0.5rem;"></i><br>
+          Add your pipeline figure at <code>static/images/pipeline.png</code>
+        </div>
+      </div>
+      <figcaption>
+        <strong>Figure 1.</strong> Overview of the ROI-NeRFs pipeline. 
+        <!-- Given a set of input images and user-defined ROIs,
+        the framework decomposes the scene into a global Scene NeRF and multiple ROI NeRFs through object-focused camera selection.
+        During rendering, Ray-level Compositional Rendering merges all components seamlessly. -->
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!-- BIBTEX                                                              -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<section class="section" style="background: var(--bg-light);">
+  <div class="container is-max-desktop">
+    <div class="bibtex-section">
+      <h2 class="section-title">BibTeX</h2>
+      <div class="bibtex-block" style="margin-top:1.2rem;">
+        <button class="copy-btn" onclick="copyBibtex(this)"><i class="fas fa-copy"></i> Copy</button>
+<pre style="margin:0; white-space:pre-wrap;">@inproceedings{bui2024roinerfs,
+  title     = {ROI-NeRFs: Hi-Fi Visualization of Objects of Interest within a Scene by NeRFs Composition},
+  author    = {Bui, Quoc-Anh and Rougeron, Gilles and Morin, Géraldine and Gasparini, Simone},
+  booktitle = {International Conference on Computer Vision Theory and Applications (VISAPP)},
+  year      = {2026}
+}</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!-- FOOTER                                                              -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-content">
+    <p>
+      This website template is adapted from
+      <a href="https://nerfies.github.io" target="_blank">Nerfies</a>.
+    </p>
+  </div>
+</footer>
+
+<script>
+function copyBibtex(btn) {
+  const pre = btn.parentElement.querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    setTimeout(() => {
+      btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+    }, 2000);
+  });
+}
+</script>
+
+</body>
+</html>
