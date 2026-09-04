@@ -51,8 +51,4 @@ If you find this work useful, please cite:
   booktitle = {International Conference on Computer Vision Theory and Applications (VISAPP)},
   year      = {2026}
 }
-```
-
-## Acknowledgments
-
-This project is built upon [Nerfstudio](https://github.com/nerfstudio-project/nerfstudio). We thank the Nerfstudio team for their excellent framework.
+``
