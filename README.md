@@ -51,4 +51,4 @@ If you find this work useful, please cite:
   booktitle = {International Conference on Computer Vision Theory and Applications (VISAPP)},
   year      = {2026}
 }
-``
+
